@@ -38,31 +38,68 @@ userRoute.raw(); // '/users/:id'
 
 ### Hierarchical Routes
 
+you can define routes:
+
 ```typescript
 const routes = route('/', {
-  users: route('/users', {
-    detail: route('/users/:id'),
+  user: route('/users/:id', {
+    list: route('/users'),
     edit: route('/users/:id/edit'),
-    posts: route('/users/:id/posts', {
-      detail: route('/users/:userId/posts/:postId')
+    post: route('/users/:userId/posts/:postId', {
+      list: route('/users/:userId/posts')
     })
   }),
   api: route('/api', {
     v1: route('/api/v1', {
-      users: route('/api/v1/users/:id')
+      user: route('/api/v1/users/:id', {
+        list: route('/api/v1/users')
+      })
     })
   })
 });
 
 // Direct callable usage - no method chaining needed
 routes(); // '/'
-routes.users(); // '/users'
-routes.users.detail({ id: 123 }); // '/users/123'
-routes.users.posts.detail({ userId: 1, postId: 456 }); // '/users/1/posts/456'
+routes.user({ id: 123 }); // '/users/123'
+routes.user.list(); // '/users'
+routes.user.post({userId: 1, posetId: 123}); // '/users/1/posts/123
+routes.user.post.list({ userId: 1 }); // '/users/1/posts'
 
 // TypeScript knows exactly what parameters each route needs
-routes.api.v1.users({ id: 789 }); // ✅ 'id' auto-completed
-routes.api.v1.users({ name: 'test' }); // ❌ Error: 'name' not expected
+routes.api.v1.user({ id: 789 }); // ✅ 'id' auto-completed
+routes.api.v1.user({ name: 'test' }); // ❌ Error: 'name' not expected
+```
+
+also you can define:
+
+```typescript
+const home = route('/', {
+  users: route('/users', {
+    show: route('/users/:id'),
+    edit: route('/users/:id/edit'),
+    posts: route('/users/:id/posts', {
+      show: route('/users/:userId/posts/:postId')
+    })
+  }),
+  api: route('/api', {
+    v1: route('/api/v1', {
+      users: route('/api/v1/users', {
+        user: route('/api/vi/users/:id')
+      })
+    })
+  })
+});
+
+// Direct callable usage - no method chaining needed
+home(); // '/'
+routes.users(); // '/users'
+routes.users.show({ id: 123 }); // '/users/123'
+routes.users.edit({ id: 123 }); // '/users/123/edit'
+routes.users.posts.show({ userId: 1, postId: 456 }); // '/users/1/posts/456'
+
+// TypeScript knows exactly what parameters each route needs
+routes.api.v1.users.user({ id: 789 }); // ✅ 'id' auto-completed
+routes.api.v1.users.user({ name: 'test' }); // ❌ Error: 'name' not expected
 ```
 
 ## Why ts-tiny-path?
@@ -71,14 +108,6 @@ routes.api.v1.users({ name: 'test' }); // ❌ Error: 'name' not expected
 ```typescript
 const userDetail = route('/users/:id');
 userDetail({ id: 123 }); // Clean and direct
-```
-
-### ❌ Traditional routing libraries
-```typescript
-// Most libraries require method calls
-userDetail.build({ id: 123 });
-userDetail.generate({ id: 123 });
-userDetail.index({ id: 123 });
 ```
 
 ## API
