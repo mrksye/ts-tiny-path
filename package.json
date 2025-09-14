@@ -1,0 +1,36 @@
+{
+  "name": "tiny-path",
+  "version": "0.1.0",
+  "description": "A lightweight TypeScript routing library with callable route objects",
+  "main": "dist/index.cjs",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc && mv dist/index.js dist/index.cjs && tsc --module esnext && mv dist/index.js dist/index.esm.js",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "routing",
+    "routes",
+    "url",
+    "path",
+    "typescript",
+    "callable"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.1.0"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.esm.js",
+      "types": "./dist/index.d.ts"
+    }
+  }
+}
