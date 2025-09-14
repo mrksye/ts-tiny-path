@@ -1,5 +1,5 @@
 {
-  "name": "tiny-path",
+  "name": "ts-tiny-path",
   "version": "0.1.0",
   "description": "A lightweight TypeScript routing library with callable route objects",
   "main": "dist/index.cjs",

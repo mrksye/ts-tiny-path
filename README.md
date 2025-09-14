@@ -1,4 +1,4 @@
-# tiny-path
+# ts-tiny-path
 
 A lightweight TypeScript routing library with **callable route objects** and automatic parameter completion.
 
@@ -13,7 +13,7 @@ A lightweight TypeScript routing library with **callable route objects** and aut
 ## Installation
 
 ```bash
-npm install tiny-path
+npm install ts-tiny-path
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ npm install tiny-path
 ### Basic Routes
 
 ```typescript
-import { route } from 'tiny-path';
+import { route } from 'ts-tiny-path';
 
 const userRoute = route('/users/:id');
 
@@ -65,9 +65,9 @@ routes.api.v1.users({ id: 789 }); // ✅ 'id' auto-completed
 routes.api.v1.users({ name: 'test' }); // ❌ Error: 'name' not expected
 ```
 
-## Why tiny-path?
+## Why ts-tiny-path?
 
-### ✅ With tiny-path (Callable)
+### ✅ With ts-tiny-path (Callable)
 ```typescript
 const userDetail = route('/users/:id');
 userDetail({ id: 123 }); // Clean and direct
