@@ -23,6 +23,14 @@
   ],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrksye/ts-tiny-path.git"
+  },
+  "homepage": "https://github.com/mrksye/ts-tiny-path#readme",
+  "bugs": {
+    "url": "https://github.com/mrksye/ts-tiny-path/issues"
+  },
   "devDependencies": {
     "typescript": "^4.1.0"
   },
