@@ -92,14 +92,14 @@ const home = route('/', {
 
 // Direct callable usage - no method chaining needed
 home(); // '/'
-routes.users(); // '/users'
-routes.users.show({ id: 123 }); // '/users/123'
-routes.users.edit({ id: 123 }); // '/users/123/edit'
-routes.users.posts.show({ userId: 1, postId: 456 }); // '/users/1/posts/456'
+home.users(); // '/users'
+home.users.show({ id: 123 }); // '/users/123'
+home.users.edit({ id: 123 }); // '/users/123/edit'
+home.users.posts.show({ userId: 1, postId: 456 }); // '/users/1/posts/456'
 
 // TypeScript knows exactly what parameters each route needs
-routes.api.v1.users.user({ id: 789 }); // ✅ 'id' auto-completed
-routes.api.v1.users.user({ name: 'test' }); // ❌ Error: 'name' not expected
+home.api.v1.users.user({ id: 789 }); // ✅ 'id' auto-completed
+home.api.v1.users.user({ name: 'test' }); // ❌ Error: 'name' not expected
 ```
 
 ## Why ts-tiny-path?
