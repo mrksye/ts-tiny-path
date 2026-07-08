@@ -62,7 +62,7 @@ const routes = route('/', {
 routes(); // '/'
 routes.user({ id: 123 }); // '/users/123'
 routes.user.list(); // '/users'
-routes.user.post({userId: 1, posetId: 123}); // '/users/1/posts/123
+routes.user.post({userId: 1, postId: 123}); // '/users/1/posts/123'
 routes.user.post.list({ userId: 1 }); // '/users/1/posts'
 
 // TypeScript knows exactly what parameters each route needs
@@ -84,7 +84,7 @@ const home = route('/', {
   api: route('/api', {
     v1: route('/api/v1', {
       users: route('/api/v1/users', {
-        user: route('/api/vi/users/:id')
+        user: route('/api/v1/users/:id')
       })
     })
   })
