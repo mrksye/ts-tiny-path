@@ -132,6 +132,10 @@ Full TypeScript support with:
 - Auto-completion for nested route structures
 - Type-safe parameter objects
 
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 ## License
 
-MIT
+Released under the [MIT License](./LICENSE).
