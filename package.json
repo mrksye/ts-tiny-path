@@ -1,6 +1,6 @@
 {
   "name": "ts-callable-path",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A lightweight TypeScript routing library with callable route objects",
   "main": "dist/index.cjs",
   "module": "dist/index.esm.js",
