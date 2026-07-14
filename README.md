@@ -1,6 +1,8 @@
-# ts-tiny-path
+# ts-callable-path
 
 A lightweight TypeScript routing library with **callable route objects** and automatic parameter completion.
+
+> Formerly published as **`ts-tiny-path`** (now deprecated). Same API — just renamed to better reflect its callable-route design.
 
 ## Key Features
 
@@ -13,7 +15,7 @@ A lightweight TypeScript routing library with **callable route objects** and aut
 ## Installation
 
 ```bash
-npm install ts-tiny-path
+npm install ts-callable-path
 ```
 
 ## Usage
@@ -21,7 +23,7 @@ npm install ts-tiny-path
 ### Basic Routes
 
 ```typescript
-import { route } from 'ts-tiny-path';
+import { route } from 'ts-callable-path';
 
 const userRoute = route('/users/:id');
 
@@ -102,9 +104,9 @@ home.api.v1.users.user({ id: 789 }); // ✅ 'id' auto-completed
 home.api.v1.users.user({ name: 'test' }); // ❌ Error: 'name' not expected
 ```
 
-## Why ts-tiny-path?
+## Why ts-callable-path?
 
-### ✅ With ts-tiny-path (Callable)
+### ✅ With ts-callable-path (Callable)
 ```typescript
 const userDetail = route('/users/:id');
 userDetail({ id: 123 }); // Clean and direct

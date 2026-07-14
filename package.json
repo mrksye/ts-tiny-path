@@ -1,5 +1,5 @@
 {
-  "name": "ts-tiny-path",
+  "name": "ts-callable-path",
   "version": "0.1.4",
   "description": "A lightweight TypeScript routing library with callable route objects",
   "main": "dist/index.cjs",
@@ -38,11 +38,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrksye/ts-tiny-path.git"
+    "url": "git+https://github.com/mrksye/ts-callable-path.git"
   },
-  "homepage": "https://github.com/mrksye/ts-tiny-path#readme",
+  "homepage": "https://github.com/mrksye/ts-callable-path#readme",
   "bugs": {
-    "url": "https://github.com/mrksye/ts-tiny-path/issues"
+    "url": "https://github.com/mrksye/ts-callable-path/issues"
   },
   "devDependencies": {
     "typescript": "^4.1.0"
