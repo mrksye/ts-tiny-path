@@ -10,6 +10,7 @@ A lightweight TypeScript routing library with **callable route objects** and aut
 - 🔧 **Auto-completion** - TypeScript automatically detects and completes required parameters
 - 📦 **Lightweight** - Zero dependencies, minimal footprint
 - 🌳 **Hierarchical** - Build nested route structures that mirror your app
+- 🗂️ **Filesystem-style paths** - Absolute (`/users`) or relative (`edit`, `./edit`) segments; write a shared prefix once. `../` is intentionally rejected
 - 🔒 **Type-safe** - Full TypeScript support with compile-time parameter validation
 
 ## Installation
@@ -72,37 +73,45 @@ routes.api.v1.user({ id: 789 }); // ✅ 'id' auto-completed
 routes.api.v1.user({ name: 'test' }); // ❌ Error: 'name' not expected
 ```
 
-also you can define:
+### Absolute vs. relative paths (filesystem-style)
+
+Each segment is either **absolute** or **relative**, exactly like a filesystem path:
+
+| Path | Meaning |
+|---|---|
+| `/users/:id` | **Absolute** — used as-is, ignores the parent. |
+| `edit` | **Relative** — composed onto the parent (`parent + '/edit'`). |
+| `./edit` | **Relative (explicit)** — same as `edit`; the `./` is just a readable marker. |
+| `../x` | **Parent traversal** — rejected at compile time *and* runtime. |
+
+Both styles coexist in one tree, chosen per node. Write full absolute paths where the
+structure is irregular, and drop the shared prefix where it isn't:
 
 ```typescript
-const home = route('/', {
-  users: route('/users', {
-    show: route('/users/:id'),
-    edit: route('/users/:id/edit'),
-    posts: route('/users/:id/posts', {
-      show: route('/users/:userId/posts/:postId')
-    })
+const api = route('/api/v1', {
+  users: route('users', {                 // relative -> /api/v1/users
+    show: route(':id'),                   // relative -> /api/v1/users/:id
+    edit: route('./:id/edit'),            // relative -> /api/v1/users/:id/edit
   }),
-  api: route('/api', {
-    v1: route('/api/v1', {
-      users: route('/api/v1/users', {
-        user: route('/api/v1/users/:id')
-      })
-    })
-  })
+  health: route('/health'),               // absolute -> /health (resets the base)
 });
 
-// Direct callable usage - no method chaining needed
-home(); // '/'
-home.users(); // '/users'
-home.users.show({ id: 123 }); // '/users/123'
-home.users.edit({ id: 123 }); // '/users/123/edit'
-home.users.posts.show({ userId: 1, postId: 456 }); // '/users/1/posts/456'
+api.users();               // '/api/v1/users'
+api.users.show({ id: 7 }); // '/api/v1/users/7'   ← ':id' inherited from the composed path
+api.users.edit({ id: 7 }); // '/api/v1/users/7/edit'
+api.health();              // '/health'
 
-// TypeScript knows exactly what parameters each route needs
-home.api.v1.users.user({ id: 789 }); // ✅ 'id' auto-completed
-home.api.v1.users.user({ name: 'test' }); // ❌ Error: 'name' not expected
+api.users.show.raw();      // '/api/v1/users/:id'
+
+// A relative child inherits every :param from its parents, enforced at compile time:
+api.users.show();          // ❌ Error: 'id' is required
+
+route('../escape');        // ❌ Error: parent traversal ".." is not allowed
 ```
+
+> **Recommendation:** prefer **absolute** paths. Because each node's literal *is* its full path,
+> hovering any `route('/api/v1/users/:id')` in your editor shows the complete URL at a glance —
+> no mental composition needed. Reach for relative segments only to factor out a long shared prefix.
 
 ## Why ts-callable-path?
 
@@ -118,8 +127,8 @@ userDetail({ id: 123 }); // Clean and direct
 
 Creates a callable route object.
 
-- `path` - URL pattern with optional parameters (`:param`)
-- `children` - Optional nested routes object
+- `path` - URL pattern with optional parameters (`:param`). **Absolute** if it starts with `/`, otherwise **relative** (a leading `./` is allowed and stripped). Paths containing a `..` segment are rejected.
+- `children` - Optional nested routes object. Relative children are composed onto this route's resolved path and inherit its `:params`; an absolute child resets the base.
 
 ### Route Object Methods
 
