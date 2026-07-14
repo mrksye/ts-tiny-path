@@ -1,6 +1,6 @@
 # ts-callable-path
 
-A lightweight TypeScript routing library with **callable route objects** and automatic parameter completion.
+A lightweight, **router-agnostic path primitive** for TypeScript: **callable route objects** with automatic parameter completion. It generates type-safe paths and plugs *under* your router of choice (React Router, Solid Router, Vue Router, Hono…) — it is not a router itself.
 
 > Formerly published as **`ts-tiny-path`** (now deprecated). Same API — just renamed to better reflect its callable-route design.
 
@@ -11,6 +11,7 @@ A lightweight TypeScript routing library with **callable route objects** and aut
 - 📦 **Lightweight** - Zero dependencies, minimal footprint
 - 🌳 **Hierarchical** - Build nested route structures that mirror your app
 - 🗂️ **Filesystem-style paths** - Absolute (`/users`) or relative (`edit`, `./edit`) segments; write a shared prefix once. `../` is intentionally rejected
+- 🔌 **Router-agnostic** - `raw()` registers routes, the callable navigates; plugs under React Router, Solid Router, Vue Router, Hono, and more (see [Integrations](#integrations))
 - 🔒 **Type-safe** - Full TypeScript support with compile-time parameter validation
 
 ## Installation
@@ -124,6 +125,54 @@ route('../escape');        // ❌ Error: parent traversal ".." is not allowed
 const userDetail = route('/users/:id');
 userDetail({ id: 123 }); // Clean and direct
 ```
+
+## Integrations
+
+`ts-callable-path` is **router-agnostic** — it only produces paths. Use `raw()` for the
+**definition side** (route registration) and the callable for the **navigation side**
+(links, redirects, `fetch`). Both sides read the same node, so the path string is never
+duplicated. Any router using `:param` syntax composes directly:
+
+### React Router
+```tsx
+const E = route('/users', { show: route(':id') }); // show -> '/users/:id'
+
+createBrowserRouter([{ path: E.show.raw(), Component: UserShow }]); // register
+<Link to={E.show({ id: 1 })}>User 1</Link>;                         // navigate -> '/users/1'
+```
+
+### Solid Router
+```tsx
+<Route path={E.show.raw()} component={UserShow} />
+<A href={E.show({ id: 1 })}>User 1</A>
+```
+
+### Vue Router
+```ts
+const routes = [{ path: E.show.raw(), component: UserShow }];
+router.push(E.show({ id: 1 }));
+```
+
+### Hono (server and client share one route)
+```ts
+const Api = route('/api/users', { show: route(':id') });
+
+app.get(Api.show.raw(), (c) => c.json({ id: c.req.param('id') })); // register
+fetch(Api.show({ id: 1 }));                                        // call
+```
+Hono infers param types straight from `raw()`'s literal: `c.req.param('id')` is typed
+`string` and unknown keys are rejected (verified against `hono@4`).
+
+### Query strings
+Keep `?query` out of the path and let the router compose it — routers accept a
+`pathname` + `query` split:
+```ts
+router.push({ path: E.show({ id: 1 }), query: { tab: 'history' } }); // Vue Router
+```
+
+### Needs an adapter / href-only
+- **TanStack Router** uses `$id` (not `:id`) and infers its own route tree — it would need a dedicated adapter.
+- **File-based routers** (Next.js, SolidStart) register routes from the filesystem; use the callable for `href` / `to` only.
 
 ## API
 
