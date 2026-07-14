@@ -113,6 +113,10 @@ route('../escape');        // ❌ Error: parent traversal ".." is not allowed
 > hovering any `route('/api/v1/users/:id')` in your editor shows the complete URL at a glance —
 > no mental composition needed. Reach for relative segments only to factor out a long shared prefix.
 
+![Editor hover on a route tree showing each child's full absolute path](./assets/endpoints_permit.png)
+
+*Hover any node and the editor shows every child's full path — no need to trace it through the tree.*
+
 ## Why ts-callable-path?
 
 ### ✅ With ts-callable-path (Callable)

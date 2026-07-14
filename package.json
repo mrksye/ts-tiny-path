@@ -6,7 +6,8 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ],
   "scripts": {
     "build": "rm -rf dist && tsc && mv dist/index.js dist/index.cjs && tsc --module esnext && mv dist/index.js dist/index.esm.js",
